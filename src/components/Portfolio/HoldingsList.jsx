@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { TrendingUp, TrendingDown, Trash2, DollarSign } from 'lucide-react'
+import { TrendingUp, TrendingDown, Trash2, Edit2, DollarSign } from 'lucide-react'
 import { portfolioService } from '../../services/portfolioService'
 import { stockAPI } from '../../services/stockAPI'
+import EditHoldingModal from './EditHoldingModal'
 
 export default function HoldingsList({ portfolioId }) {
   const [holdings, setHoldings] = useState([])
   const [holdingsWithData, setHoldingsWithData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [editingHolding, setEditingHolding] = useState(null)
 
   useEffect(() => {
     if (portfolioId) {
@@ -54,6 +56,14 @@ export default function HoldingsList({ portfolioId }) {
       console.error('Error deleting holding:', error)
       alert('Failed to delete holding')
     }
+  }
+
+  const handleEditClick = (holding) => {
+    setEditingHolding(holding)
+  }
+
+  const handleEditSuccess = () => {
+    loadHoldings() // Reload holdings after edit
   }
 
   const calculateTotals = () => {
@@ -130,7 +140,7 @@ export default function HoldingsList({ portfolioId }) {
               <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Value</th>
               <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Gain/Loss</th>
               <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Dividend</th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
+              <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -183,12 +193,22 @@ export default function HoldingsList({ portfolioId }) {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => handleDeleteHolding(holding.id)}
-                      className="text-gray-400 hover:text-red-600 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleEditClick(holding)}
+                        className="text-gray-400 hover:text-indigo-600 transition-colors"
+                        title="Edit holding"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteHolding(holding.id)}
+                        className="text-gray-400 hover:text-red-600 transition-colors"
+                        title="Delete holding"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )
@@ -196,6 +216,15 @@ export default function HoldingsList({ portfolioId }) {
           </tbody>
         </table>
       </div>
+
+      {/* Edit Modal */}
+      {editingHolding && (
+        <EditHoldingModal
+          holding={editingHolding}
+          onClose={() => setEditingHolding(null)}
+          onSuccess={handleEditSuccess}
+        />
+      )}
     </div>
   )
 }
