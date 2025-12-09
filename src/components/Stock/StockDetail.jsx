@@ -117,7 +117,7 @@ export default function StockDetail({ symbol, onAddToPortfolio }) {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Dividend Per Share</span>
+              <span className="text-gray-600">Dividend Per Share (Yearly)</span>
               <span className="font-medium">
                 {overview.DividendPerShare ? `$${parseFloat(overview.DividendPerShare).toFixed(2)}` : 'N/A'}
               </span>

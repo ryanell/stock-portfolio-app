@@ -6,6 +6,7 @@ import StockDetail from '../components/Stock/StockDetail'
 import PortfolioList from '../components/Portfolio/PortfolioList'
 import HoldingsList from '../components/Portfolio/HoldingsList'
 import AddHoldingModal from '../components/Portfolio/AddHoldingModal'
+import PortfolioCharts from '../components/Portfolio/PortfolioCharts'
 
 export default function Dashboard() {
   const { user } = useAuth()

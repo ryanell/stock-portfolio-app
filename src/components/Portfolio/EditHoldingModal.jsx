@@ -8,25 +8,27 @@ export default function EditHoldingModal({ holding, onClose, onSuccess }) {
   const [purchaseDate, setPurchaseDate] = useState(holding.purchase_date)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true)
 
-    try {
-      await portfolioService.updateHolding(holding.id, {
-        shares: parseFloat(shares),
-        purchase_price: parseFloat(purchasePrice),
-        purchase_date: purchaseDate
-      })
-      onSuccess()
-      onClose()
-    } catch (error) {
-      console.error('Error updating holding:', error)
-      alert('Failed to update holding')
-    } finally {
-      setLoading(false)
-    }
+  const updates = {
+    shares: parseFloat(shares),
+    purchase_price: parseFloat(purchasePrice),
+    purchase_date: purchaseDate
   }
+
+  try {
+    await portfolioService.updateHolding(holding.id, updates)
+    await onSuccess() // Wait for the success callback
+    onClose() // Then close
+  } catch (error) {
+    console.error('Error updating holding:', error)
+    alert('Failed to update holding: ' + error.message)
+  } finally {
+    setLoading(false)
+  }
+}
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
