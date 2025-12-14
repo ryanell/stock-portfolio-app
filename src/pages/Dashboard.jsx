@@ -21,7 +21,6 @@ export default function Dashboard() {
   }
 
   const handleSelectStock = (stock) => {
-    // Extract symbol from the search result
     setSelectedStock(stock['1. symbol'])
   }
 
@@ -35,7 +34,10 @@ export default function Dashboard() {
   }
 
   const handleHoldingAdded = () => {
-    // Trigger refresh of holdings list
+    setRefreshHoldings(prev => prev + 1)
+  }
+
+  const handleHoldingUpdated = () => {
     setRefreshHoldings(prev => prev + 1)
   }
 
@@ -71,7 +73,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right Content - Stock Search and Holdings */}
+          {/* Right Content - Stock Search, Charts, and Holdings */}
           <div className="lg:col-span-2 space-y-8">
             {/* Stock Search Section */}
             <div className="bg-white rounded-lg shadow p-6">
@@ -89,15 +91,24 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Portfolio Holdings Section */}
+            {/* Portfolio Charts and Holdings Section */}
             {selectedPortfolioId ? (
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Portfolio Holdings</h2>
-                <HoldingsList 
-                  portfolioId={selectedPortfolioId} 
-                  key={refreshHoldings} // Force refresh when this changes
-                />
-              </div>
+              <>
+                {/* Portfolio Charts */}
+                <div>
+                  <PortfolioCharts portfolioId={selectedPortfolioId} />
+                </div>
+
+                {/* Holdings Table */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4">Portfolio Holdings</h2>
+                  <HoldingsList 
+                    portfolioId={selectedPortfolioId} 
+                    key={refreshHoldings}
+                    onHoldingUpdated={handleHoldingUpdated}
+                  />
+                </div>
+              </>
             ) : (
               <div className="bg-white rounded-lg shadow p-6 text-center">
                 <p className="text-gray-600">Create or select a portfolio to view holdings</p>

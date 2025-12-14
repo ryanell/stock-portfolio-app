@@ -48,8 +48,8 @@ const normalizeFinnhubProfile = (profile, metrics) => {
     PayoutRatio: metrics?.payoutRatioTTM ? (metrics.payoutRatioTTM / 100).toString() : null,
     ExDividendDate: null,
     ReturnOnEquityTTM: metrics?.roeTTM ? (metrics.roeTTM / 100).toString() : null,
-    '50DayMovingAverage': metrics?.['50DayMovingAverage']?.toString() || '0',
-    '200DayMovingAverage': metrics?.['200DayMovingAverage']?.toString() || '0'
+    '50DayMovingAverage': metrics?.['50DayMovingAverage']?.toString() || 'N/A',
+    '200DayMovingAverage': metrics?.['200DayMovingAverage']?.toString() || 'N/A'
   }
 }
 
